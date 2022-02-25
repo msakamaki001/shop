@@ -55,7 +55,7 @@ class ShopPage extends HookWidget {
                     builder: (context) {
                       return AlertDialog(
                         title: Text('購入しますか？'),
-                        content: (inItems!.length <= 0)
+                        content: (inItems == null || inItems.length <= 0)
                             ? Text('カートは空です')
                             : SizedBox(
                                 height: 200,
