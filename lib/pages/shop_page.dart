@@ -12,6 +12,8 @@ import 'category_page.dart';
 class ShopPage extends HookWidget {
   @override
   Widget build(BuildContext context) {
+    GlobalObjectKey<ScaffoldMessengerState> scaffoldMessengerState =
+        new GlobalObjectKey("scaffoldMessengerState");
     final shopStateNotifier = useProvider(shopProvider.notifier);
     final shopState = useProvider(shopProvider);
     useEffect(() {
@@ -28,6 +30,7 @@ class ShopPage extends HookWidget {
     }, const []);
 
     return MaterialApp(
+      scaffoldMessengerKey: scaffoldMessengerState,
       home: DefaultTabController(
         length:
             (shopState.categories == null) ? 0 : shopState.categories!.length,
@@ -48,8 +51,6 @@ class ShopPage extends HookWidget {
               IconButton(
                 onPressed: () async {
                   final inItems = await shopStateNotifier.inItems();
-                  final cart = await SharedPreferences.getInstance();
-                  var inCart = cart.getStringList('inItems');
                   showDialog(
                     context: context,
                     builder: (context) {
@@ -105,13 +106,16 @@ class ShopPage extends HookWidget {
                               final result =
                                   await shopStateNotifier.buyCartItems();
                               if (result) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text('購入しました')));
+                                Navigator.pop(context);
+                                scaffoldMessengerState.currentState!
+                                    .showSnackBar(
+                                        SnackBar(content: Text('購入しました')));
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(content: Text('購入できませんでした')));
+                                Navigator.pop(context);
+                                scaffoldMessengerState.currentState!
+                                    .showSnackBar(
+                                        SnackBar(content: Text('購入できませんでした')));
                               }
-                              Navigator.pop(context);
                             },
                             child: Text('はい'),
                           ),
