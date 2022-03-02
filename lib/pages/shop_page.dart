@@ -61,37 +61,47 @@ class ShopPage extends HookWidget {
                             : SizedBox(
                                 height: 200,
                                 width: double.maxFinite,
-                                child: ListView.builder(
-                                  itemCount: inItems.length,
-                                  shrinkWrap: true,
-                                  itemBuilder: (context, int index) {
-                                    return Dismissible(
-                                      key: UniqueKey(),
-                                      child: Card(
-                                        child: ListTile(
-                                          leading: Image.network(
-                                              inItems[index]!.image_path!),
-                                          title: Text(inItems[index]!.name!),
-                                          subtitle: Text(
-                                              '${inItems[index]!.price!.toString()}円'),
-                                        ),
-                                      ),
-                                      onDismissed: (direction) async {
-                                        await shopStateNotifier.deleteCartItem(
-                                            inItems[index]!.id!);
-                                        final cart = await SharedPreferences
-                                            .getInstance();
-                                        var data =
-                                            cart.getStringList('inItems');
-                                        if (data != null && data.isEmpty) {
-                                          Navigator.pop(context);
-                                        }
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      "スワイプで削除",
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                    ListView.builder(
+                                      itemCount: inItems.length,
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, int index) {
+                                        return Dismissible(
+                                          key: UniqueKey(),
+                                          child: Card(
+                                            child: ListTile(
+                                              leading: Image.network(
+                                                  inItems[index]!.image_path!),
+                                              title:
+                                                  Text(inItems[index]!.name!),
+                                              subtitle: Text(
+                                                  '${inItems[index]!.price!.toString()}円'),
+                                            ),
+                                          ),
+                                          onDismissed: (direction) async {
+                                            await shopStateNotifier
+                                                .deleteCartItem(
+                                                    inItems[index]!.id!);
+                                            final cart = await SharedPreferences
+                                                .getInstance();
+                                            var data =
+                                                cart.getStringList('inItems');
+                                            if (data != null && data.isEmpty) {
+                                              Navigator.pop(context);
+                                            }
+                                          },
+                                          background: Container(
+                                            color: Colors.red,
+                                          ),
+                                        );
                                       },
-                                      background: Container(
-                                        color: Colors.red,
-                                      ),
-                                    );
-                                  },
+                                    ),
+                                  ],
                                 ),
                               ),
                         actions: [
@@ -102,21 +112,23 @@ class ShopPage extends HookWidget {
                             child: Text('いいえ'),
                           ),
                           ElevatedButton(
-                            onPressed: () async {
-                              final result =
-                                  await shopStateNotifier.buyCartItems();
-                              if (result) {
-                                Navigator.pop(context);
-                                scaffoldMessengerState.currentState!
-                                    .showSnackBar(
-                                        SnackBar(content: Text('購入しました')));
-                              } else {
-                                Navigator.pop(context);
-                                scaffoldMessengerState.currentState!
-                                    .showSnackBar(
-                                        SnackBar(content: Text('購入できませんでした')));
-                              }
-                            },
+                            onPressed: (inItems == null || inItems.length <= 0)
+                                ? null
+                                : () async {
+                                    final result =
+                                        await shopStateNotifier.buyCartItems();
+                                    if (result) {
+                                      Navigator.pop(context);
+                                      scaffoldMessengerState.currentState!
+                                          .showSnackBar(SnackBar(
+                                              content: Text('購入しました')));
+                                    } else {
+                                      Navigator.pop(context);
+                                      scaffoldMessengerState.currentState!
+                                          .showSnackBar(SnackBar(
+                                              content: Text('購入できませんでした')));
+                                    }
+                                  },
                             child: Text('はい'),
                           ),
                         ],
