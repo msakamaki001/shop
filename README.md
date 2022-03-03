@@ -1,2 +1,2 @@
-iOSを端末として動かす場合はsetting.dartのBASE_URLをlocalhostに適用する
+iOSを端末として動かす場合はsetting.dartのBASE_URLをlocalhostに適用する<br>
 Androidを端末として動かす場合はsetting.dartの$BASE_URLを10.0.2.2に適用する
