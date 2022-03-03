@@ -6,6 +6,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shop/providers/shop_provider.dart';
+import 'package:shop/setting.dart';
 
 import 'category_page.dart';
 
@@ -75,8 +76,15 @@ class ShopPage extends HookWidget {
                                           key: UniqueKey(),
                                           child: Card(
                                             child: ListTile(
-                                              leading: Image.network(
-                                                  inItems[index]!.image_path!),
+                                              leading: Image.network(Setting
+                                                      .BASE_URL
+                                                      .contains('10.0.2.2')
+                                                  ? inItems[index]!
+                                                      .image_path!
+                                                      .replaceFirst('localhost',
+                                                          '10.0.2.2')
+                                                  : inItems[index]!
+                                                      .image_path!),
                                               title:
                                                   Text(inItems[index]!.name!),
                                               subtitle: Text(

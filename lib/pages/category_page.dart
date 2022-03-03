@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shop/providers/shop_provider.dart';
+import 'package:shop/setting.dart';
 
 class CategoryPage extends HookWidget {
   CategoryPage(this.categoryId);
@@ -41,7 +42,9 @@ class CategoryPage extends HookWidget {
                 (e) => GestureDetector(
                   child: Stack(
                     children: <Widget>[
-                      Image.network(e!.image_path!),
+                      Image.network(Setting.BASE_URL.contains('10.0.2.2')
+                          ? e!.image_path!.replaceFirst('localhost', '10.0.2.2')
+                          : e!.image_path!),
                       Align(
                         alignment: Alignment.topLeft,
                         child: Text(
