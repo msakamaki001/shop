@@ -1,2 +1,3 @@
 iOSを端末として動かす場合はsetting.dartのBASE_URLをlocalhostに適用する<br>
-Androidを端末として動かす場合はsetting.dartの$BASE_URLを10.0.2.2に適用する
+Androidを端末として動かす場合はsetting.dartのBASE_URLを10.0.2.2に適用する<br>
+localhost以外でAPIを動かす場合もsetting.dartのBASE_URLを変更する
